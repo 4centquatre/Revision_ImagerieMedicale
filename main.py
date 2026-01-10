@@ -127,6 +127,12 @@ if st.session_state.step == "question":
 if st.session_state.step == "reponse":
     if "indice2" not in st.session_state or st.session_state.indice2 is None:
         st.session_state.indice2 = randint(0,4)
+        if len(st.session_state.dico_reponses.keys()) < 5:
+            while st.session_state.indice2 in st.session_state.dico_reponses.keys():
+                st.session_state.indice2 = randint(0,4)
+        else:
+            st.session_state.step = "fin"
+            st.rerun()
     imagerie = st.session_state.dico[st.session_state.indice][0]
     st.session_state.questions[st.session_state.indice] = imagerie
     st.write("Imagerie : "+imagerie)
@@ -134,6 +140,7 @@ if st.session_state.step == "reponse":
         st.write(dico_indice2[st.session_state.indice2]+" : ")
         reponse = st.text_input("Écris ta réponse", key="reponse_input")
         validee = st.form_submit_button("Valider")
+        st.session_state.dico_reponses[st.session_state.indice2] = reponse
 
     if st.button("Stop"):
         st.session_state.step = "fin"
