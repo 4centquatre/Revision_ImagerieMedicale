@@ -137,6 +137,7 @@ if st.session_state.step == "reponse":
 
     if st.button("Stop"):
         st.session_state.step = "fin"
+        st.rerun()
 
     elif validee:
         st.session_state.step = "feedback"
