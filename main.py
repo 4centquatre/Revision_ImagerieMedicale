@@ -16,7 +16,7 @@ dico = {
                         "Intérêts médicaux": ["Il permet de voir une anomalie peu ou pas visible sur une radiographie ou une échographie. Il est très utile pour visualiser les organes du système nerveux central mais pas seulement. Il permet aussi de localiser une tumeur, confirmer un accident vasculaire cérébral, diagnostiquer une maladie osseuse etc."], 
                         "Avantages": ["Images en coupes et en 3D. Image plus précises. Examen indolore et non invasif"], 
                         "Inconvénients": ["Technique irradiante donc contre indiquée pour femme enceinte. Allergie possible à l'iode. Appareillage plus coûteux que celui de la radiographie. Rayons X cancérigènes et tératogènes."]}],
-    2: ["IRM",{"Définition": ["Technique basée sur l'utilisation d'un champ magnétique et des ondes radios."], 
+    2: ["",{"Définition": ["Technique basée sur l'utilisation d'un champ magnétique et des ondes radios."], 
                "Principes": ["- En fonction de la teneur en hydrogène des tissus, un système informatique donne des images en coupes, en trois dimensions.",
                    "- La qualité des images peut être améliorée en injectant un produit de contraste, le gadolinium"], 
                "Intérêts médicaux": ["- Analyse Morphologique : ",
@@ -99,44 +99,68 @@ if "tab_erreurs" not in st.session_state:
 
 st.title("Quiz Imagerie Médicale")
 
+st.markdown("""
+<style>
+.button-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+}
+
+.button-row div.stButton > button {
+    width: auto;
+    white-space: nowrap;
+    padding: 0.5em 1.2em;
+}
+
+h1 {
+    text-align: center;
+}
+</style>
+""", unsafe_allow_html=True)
+
 if st.session_state.step == "debut":
-    col1, col2, col3, col4, col5, col6 = st.columns(6)
-    with col1:
+
+    col_left, col_center, col_right = st.columns([1, 3, 1])
+
+    with col_center:
+
         if st.button("Radiographie"):
             st.session_state.indice = 0
             st.session_state.step = "question"
-            st.session_state.end[st.session_state.indice] = [dico_indice3[st.session_state.indice],{}]
-            st.rerun() 
-    with col2:
+            st.session_state.end[0] = [dico_indice3[0], {}]
+            st.rerun()
+
         if st.button("Scanographie ou Tomodensitométrie"):
             st.session_state.indice = 1
             st.session_state.step = "question"
-            st.session_state.end[st.session_state.indice] = [dico_indice3[st.session_state.indice],{}]
-            st.rerun() 
-    with col3:
-        if st.button("IRM"):
+            st.session_state.end[1] = [dico_indice3[1], {}]
+            st.rerun()
+
+        if st.button("Imagerie par Résonnance Médicale"):
             st.session_state.indice = 2
             st.session_state.step = "question"
-            st.session_state.end[st.session_state.indice] = [dico_indice3[st.session_state.indice],{}]
-            st.rerun() 
-    with col4:
+            st.session_state.end[2] = [dico_indice3[2], {}]
+            st.rerun()
+
         if st.button("Echographie"):
             st.session_state.indice = 3
             st.session_state.step = "question"
-            st.session_state.end[st.session_state.indice] = [dico_indice3[st.session_state.indice],{}]
-            st.rerun() 
-    with col5:
+            st.session_state.end[3] = [dico_indice3[3], {}]
+            st.rerun()
+
         if st.button("Scintigraphie"):
             st.session_state.indice = 4
             st.session_state.step = "question"
-            st.session_state.end[st.session_state.indice] = [dico_indice3[st.session_state.indice],{}]
-            st.rerun() 
-    with col6:
+            st.session_state.end[4] = [dico_indice3[4], {}]
+            st.rerun()
+
         if st.button("Fibroscopie"):
-            st.session_state.indice = 5 
+            st.session_state.indice = 5
             st.session_state.step = "question"
-            st.session_state.end[st.session_state.indice] = [dico_indice3[st.session_state.indice],{}]
-            st.rerun()  
+            st.session_state.end[5] = [dico_indice3[5], {}]
+            st.rerun()
 
 if st.session_state.step == "debut2":
     st.session_state.end[st.session_state.indice] = [dico_indice3[st.session_state.indice],{}]
