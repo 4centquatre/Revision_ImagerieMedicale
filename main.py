@@ -61,6 +61,21 @@ dico_indice2 = {0: "Définition",
                 4: "Inconvénients"
 }
 
+dico_indice3 = {0: "Radiographie",
+                1: "Scanographie",
+                2: "IRM",
+                3: "Echographie",
+                4: "Scintigraphie",
+                5: "Fibroscopie"
+}
+
+dico_indice4 = {"Définition":0,
+                "Principes":1,
+                "Intérêts médicaux":2,
+                "Avantages":3,
+                "Inconvénients":4
+}
+
 if "score" not in st.session_state:
     st.session_state.score = 0
 if "questions" not in st.session_state:
@@ -76,9 +91,11 @@ if "end" not in st.session_state:
 if "dico" not in st.session_state:
     st.session_state.dico = dico.copy()
 if "indice" not in st.session_state:
-    st.session_state.current = None
+    st.session_state.indice = None
 if "indice2" not in st.session_state:
-    st.session_state.current = None
+    st.session_state.indice2 = None
+if "tab_erreurs" not in st.session_state:
+    st.session_state.tab_erreurs = []
 
 st.title("Quiz Imagerie Médicale")
 
@@ -88,37 +105,50 @@ if st.session_state.step == "debut":
         if st.button("Radiographie"):
             st.session_state.indice = 0
             st.session_state.step = "question"
+            st.session_state.end[st.session_state.indice] = [dico_indice3[st.session_state.indice],{}]
             st.rerun() 
     with col2:
         if st.button("Scanographie ou Tomodensitométrie"):
             st.session_state.indice = 1
             st.session_state.step = "question"
+            st.session_state.end[st.session_state.indice] = [dico_indice3[st.session_state.indice],{}]
             st.rerun() 
     with col3:
         if st.button("IRM"):
             st.session_state.indice = 2
             st.session_state.step = "question"
+            st.session_state.end[st.session_state.indice] = [dico_indice3[st.session_state.indice],{}]
             st.rerun() 
     with col4:
         if st.button("Echographie"):
             st.session_state.indice = 3
             st.session_state.step = "question"
+            st.session_state.end[st.session_state.indice] = [dico_indice3[st.session_state.indice],{}]
             st.rerun() 
     with col5:
         if st.button("Scintigraphie"):
             st.session_state.indice = 4
             st.session_state.step = "question"
+            st.session_state.end[st.session_state.indice] = [dico_indice3[st.session_state.indice],{}]
             st.rerun() 
     with col6:
         if st.button("Fibroscopie"):
             st.session_state.indice = 5 
             st.session_state.step = "question"
+            st.session_state.end[st.session_state.indice] = [dico_indice3[st.session_state.indice],{}]
             st.rerun()  
-    
+
+if st.session_state.step == "debut2":
+    st.session_state.end[st.session_state.indice] = [dico_indice3[st.session_state.indice],{}]
+    st.session_state.step = "question"
+    st.rerun()
 
 if st.session_state.step == "question":
     st.session_state.reponse = ""
-    if len(st.session_state.questions.keys()) >= len(st.session_state.dico.keys()):
+    if len(st.session_state.questions.keys()) >= len(st.session_state.dico[st.session_state.indice][1].keys()):
+        print(st.session_state.questions)
+        print(st.session_state.dico)
+        print('AAAAAAAAAAAAAAAAAAAAAAAAA')
         st.session_state.step = "fin"
         st.rerun()
     st.session_state.step = "reponse"
@@ -126,11 +156,16 @@ if st.session_state.step == "question":
 
 if st.session_state.step == "reponse":
     if "indice2" not in st.session_state or st.session_state.indice2 is None:
-        st.session_state.indice2 = randint(0,4)
-        if len(st.session_state.dico_reponses.keys()) < 5:
-            while st.session_state.indice2 in st.session_state.dico_reponses.keys():
-                st.session_state.indice2 = randint(0,4)
+        if len(st.session_state.dico_reponses.keys()) < len(st.session_state.dico[st.session_state.indice][1]):
+            tab_indices = []
+            for cle in st.session_state.dico[st.session_state.indice][1].keys():
+                tab_indices.append(cle)
+            i = randint(0, len(tab_indices) - 1)
+            while dico_indice4[tab_indices[i]] in st.session_state.dico_reponses.keys():
+                i = randint(0,len(tab_indices) - 1)
+            st.session_state.indice2 = dico_indice4[tab_indices[i]]
         else:
+            print('BBBBBBBBBBBBBBBBBBBBBBBBBBBB')
             st.session_state.step = "fin"
             st.rerun()
     imagerie = st.session_state.dico[st.session_state.indice][0]
@@ -162,23 +197,24 @@ if st.session_state.step == "feedback":
         if vrai_faux == "Vrai":
             st.session_state.score += 1
         elif vrai_faux == "Faux":
-            st.session_state.end[st.session_state.indice] = st.session_state.dico[st.session_state.indice][1][dico_indice2[st.session_state.indice2]]
+            st.session_state.end[st.session_state.indice][1][dico_indice2[st.session_state.indice2]] = st.session_state.dico[st.session_state.indice][1][dico_indice2[st.session_state.indice2]]
+            st.session_state.tab_erreurs.append(st.session_state.dico[st.session_state.indice][1][dico_indice2[st.session_state.indice2]])
         st.session_state.step = "question"
         st.session_state.indice2 = None
         st.rerun()
 
 if st.session_state.step == "fin":
     st.write("C'est fini ! Ton score est de : "+str(st.session_state.score)+"/"+str(len(st.session_state.dico_reponses.keys()))+ " Bravo mon coeur t'es trop forte !")
-    if len(st.session_state.end.keys())>1:
+    if len(st.session_state.tab_erreurs)>1:
         st.write("Tes reponses fausses etaient : ")
-    elif len(st.session_state.end.keys()) == 1:
+    elif len(st.session_state.tab_erreurs) == 1:
         st.write("Ta reponse fausse etait : ")
     else:
         st.write("Tu n'as eu aucune reponse fausse bravo !")
-    for tab in st.session_state.end.values():
-        chaine = ""
+    for tab in st.session_state.tab_erreurs:
+        chaine = "- "
         for item in tab:
-            chaine = chaine + str(item) + " "
+            chaine += item
         st.write(chaine)
     if st.button("Refaire"):
         st.session_state.score = 0
@@ -190,4 +226,22 @@ if st.session_state.step == "fin":
         st.session_state.indice = None
         st.session_state.indice2 = None
         st.session_state.reponse = ""
+        st.session_state.tab_erreurs = []
+        st.session_state.dico_reponses = {}
         st.rerun()
+    elif st.button("Refaire avec tes erreurs"):
+        if len(st.session_state.tab_erreurs) > 0:
+            st.session_state.questions = {}
+            st.session_state.score = 0
+            st.session_state.current = None
+            st.session_state.dico = st.session_state.end.copy()
+            print(st.session_state.dico)
+            st.session_state.end = {}
+            st.session_state.indice2 = None
+            st.session_state.reponse = ""
+            st.session_state.tab_erreurs = []
+            st.session_state.dico_reponses = {}
+            st.session_state.step = "debut2"
+            st.rerun()
+        else:
+            st.warning("Tu n'as aucune erreur à refaire.")
