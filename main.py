@@ -146,9 +146,6 @@ if st.session_state.step == "debut2":
 if st.session_state.step == "question":
     st.session_state.reponse = ""
     if len(st.session_state.questions.keys()) >= len(st.session_state.dico[st.session_state.indice][1].keys()):
-        print(st.session_state.questions)
-        print(st.session_state.dico)
-        print('AAAAAAAAAAAAAAAAAAAAAAAAA')
         st.session_state.step = "fin"
         st.rerun()
     st.session_state.step = "reponse"
@@ -165,7 +162,6 @@ if st.session_state.step == "reponse":
                 i = randint(0,len(tab_indices) - 1)
             st.session_state.indice2 = dico_indice4[tab_indices[i]]
         else:
-            print('BBBBBBBBBBBBBBBBBBBBBBBBBBBB')
             st.session_state.step = "fin"
             st.rerun()
     imagerie = st.session_state.dico[st.session_state.indice][0]
@@ -235,7 +231,6 @@ if st.session_state.step == "fin":
             st.session_state.score = 0
             st.session_state.current = None
             st.session_state.dico = st.session_state.end.copy()
-            print(st.session_state.dico)
             st.session_state.end = {}
             st.session_state.indice2 = None
             st.session_state.reponse = ""
